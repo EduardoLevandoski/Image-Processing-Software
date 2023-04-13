@@ -41,9 +41,9 @@ namespace WinFormsApp1
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(174, 462);
+            this.button1.Location = new System.Drawing.Point(172, 467);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(178, 56);
+            this.button1.Size = new System.Drawing.Size(227, 51);
             this.button1.TabIndex = 0;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -51,9 +51,9 @@ namespace WinFormsApp1
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(117, 112);
+            this.pictureBox1.Location = new System.Drawing.Point(105, 73);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(295, 287);
+            this.pictureBox1.Size = new System.Drawing.Size(354, 361);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
@@ -67,15 +67,15 @@ namespace WinFormsApp1
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(571, 112);
+            this.pictureBox2.Location = new System.Drawing.Point(526, 73);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(300, 287);
+            this.pictureBox2.Size = new System.Drawing.Size(354, 361);
             this.pictureBox2.TabIndex = 3;
             this.pictureBox2.TabStop = false;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(587, 467);
+            this.button2.Location = new System.Drawing.Point(602, 467);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(227, 51);
             this.button2.TabIndex = 4;
