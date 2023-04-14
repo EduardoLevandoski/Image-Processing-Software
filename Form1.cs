@@ -44,7 +44,7 @@ namespace WinFormsApp1
                 }
                 catch (ArgumentException ex)
                 {
-                    MessageBox.Show("Não foi possivel achar a média as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Não foi possivel carregar a imagem", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +84,7 @@ namespace WinFormsApp1
                 }
                 catch (ArgumentException ex)
                 {
-                    MessageBox.Show("Não foi possivel achar a média as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Não foi possivel carregar a imagem", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 catch (Exception ex)
                 {
@@ -128,7 +128,7 @@ namespace WinFormsApp1
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show("Não foi possivel achar a média as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Não foi possivel adicionar as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -163,11 +163,11 @@ namespace WinFormsApp1
                         }
                     }
                 }
-           
+
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show("Não foi possivel achar a média as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Não foi possivel subtrair as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -200,11 +200,11 @@ namespace WinFormsApp1
                         }
                     }
                 }
-              
+
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show("Não foi possivel achar a média as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Não foi possivel multiplicar as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -243,11 +243,11 @@ namespace WinFormsApp1
                         }
                     }
                 }
-                
+
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show("Não foi possivel achar a média as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Não foi possivel dividir as imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -297,8 +297,8 @@ namespace WinFormsApp1
 
             try
             {
-                
-                if(!double.TryParse(textBox1.Text, out blendValue))
+
+                if (!double.TryParse(textBox1.Text, out blendValue))
                 {
                     blendValue = 0.5f;
                 }
@@ -333,6 +333,155 @@ namespace WinFormsApp1
             {
                 MessageBox.Show(ex.Message, "Erro ao abrir imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null && img2 != null)
+                {
+                    Bitmap img8 = new Bitmap(img1.Height, img1.Width);
+
+                    for (int i = 0; i < img8.Width; i++)
+                    {
+                        for (int j = 0; j < img8.Height; j++)
+                        {
+                            Color pixelP = img1.GetPixel(i, j);
+                            Color pixelQ = img2.GetPixel(i, j);
+
+                            int R = pixelP.R & pixelQ.R;
+                            int G = pixelP.G & pixelQ.G;
+                            int B = pixelP.B & pixelQ.B;
+                            int A = pixelP.A & pixelQ.A;
+
+                            img8.SetPixel(i, j, Color.FromArgb(R, G, B));
+                            pictureBox3.Image = img8;
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Não foi possivel fazer o AND das imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null && img2 != null)
+                {
+                    Bitmap img9 = new Bitmap(img1.Height, img1.Width);
+
+                    for (int i = 0; i < img9.Width; i++)
+                    {
+                        for (int j = 0; j < img9.Height; j++)
+                        {
+                            Color pixelP = img1.GetPixel(i, j);
+                            Color pixelQ = img2.GetPixel(i, j);
+
+                            int R = pixelP.R | pixelQ.R;
+                            int G = pixelP.G | pixelQ.G;
+                            int B = pixelP.B | pixelQ.B;
+                            int A = pixelP.A | pixelQ.A;
+
+                            img9.SetPixel(i, j, Color.FromArgb(R, G, B));
+                            pictureBox3.Image = img9;
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Não foi possivel fazer o OR das imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null && img2 != null)
+                {
+                    Bitmap img9 = new Bitmap(img1.Height, img1.Width);
+
+                    for (int i = 0; i < img9.Width; i++)
+                    {
+                        for (int j = 0; j < img9.Height; j++)
+                        {
+                            Color pixelP = img1.GetPixel(i, j);
+                            Color pixelQ = img2.GetPixel(i, j);
+
+                            int R = pixelP.R ^ pixelQ.R;
+                            int G = pixelP.G ^ pixelQ.G;
+                            int B = pixelP.B ^ pixelQ.B;
+                            int A = pixelP.A ^ pixelQ.A;
+
+                            img9.SetPixel(i, j, Color.FromArgb(R, G, B));
+                            pictureBox3.Image = img9;
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Não foi possivel fazer o XOR das imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null && img2 != null)
+                {
+                    Bitmap img9 = new Bitmap(img1.Height, img1.Width);
+
+                    for (int i = 0; i < img9.Width; i++)
+                    {
+                        for (int j = 0; j < img9.Height; j++)
+                        {
+                            Color pixelP = img1.GetPixel(i, j);
+                            Color pixelQ = img2.GetPixel(i, j);
+
+                            int R = ~(~pixelP.R & ~pixelQ.R);
+                            int G = ~(~pixelP.B & ~pixelQ.B);
+                            int B = ~(~pixelP.G & ~pixelQ.G);
+
+                            img9.SetPixel(i, j, Color.FromArgb(R, G, B));
+                            pictureBox3.Image = img9;
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Não foi possivel fazer o NOT das imagens", "As imagens devem ser do mesmo tamanho...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void espelhoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.Show();
         }
     }
 }
