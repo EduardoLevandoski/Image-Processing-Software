@@ -218,32 +218,30 @@ namespace WinFormsApp1
             {
                 if (img1 != null && img2 != null)
                 {
-                    Bitmap img6 = new Bitmap(img1.Height, img1.Width);
+                    Bitmap img6 = new Bitmap(img1.Width, img1.Height);
 
                     for (int i = 0; i < img6.Width; i++)
                     {
                         for (int j = 0; j < img6.Height; j++)
                         {
-                            int R = 0, G = 0, B = 0, A = 0;
                             Color pixelP = img1.GetPixel(i, j);
                             Color pixelQ = img2.GetPixel(i, j);
 
+                            int R = 0, G = 0, B = 0;
 
                             if (pixelQ.R != 0)
-                                R = pixelP.R / pixelQ.R;
+                                R = Math.Min(255, (pixelP.R * 255) / pixelQ.R);
                             if (pixelQ.G != 0)
-                                G = pixelP.G / pixelQ.G;
+                                G = Math.Min(255, (pixelP.G * 255) / pixelQ.G);
                             if (pixelQ.B != 0)
-                                B = pixelP.B / pixelQ.B;
-                            if (pixelQ.A != 0)
-                                A = pixelP.A / pixelQ.A;
+                                B = Math.Min(255, (pixelP.B * 255) / pixelQ.B);
 
                             img6.SetPixel(i, j, Color.FromArgb(R, G, B));
-                            pictureBox3.Image = img6;
                         }
                     }
-                }
 
+                    pictureBox3.Image = img6;
+                }
             }
             catch (ArgumentException ex)
             {
@@ -475,6 +473,37 @@ namespace WinFormsApp1
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Erro ao abrir imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            if (pictureBox3.Image != null)
+            {
+
+                try
+                {
+                    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                    {
+                        saveFileDialog.Filter = "Arquivos de Imagem|*.jpg;*.jpeg;*.png|Todos os Arquivos|*.*";
+                        saveFileDialog.Title = "Salvar Imagem";
+
+                        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string outputPath = saveFileDialog.FileName;
+                            pictureBox3.Image.Save(outputPath);
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro ao salvar a imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nenhuma imagem para salvar!");
             }
         }
     }
