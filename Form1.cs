@@ -45,8 +45,9 @@ namespace WinFormsApp1
             var filePath = string.Empty;
             openFileDialog1.InitialDirectory = "C:\\Matlab";
             openFileDialog1.Filter = "TIFF image (*.tif)|*.tif|JPG image (*.jpg)|*.jpg|BMP image (*.bmp)|*.bmp|PNG image (*.png)|*.png|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.FilterIndex = 5;
             openFileDialog1.RestoreDirectory = true;
+
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -115,8 +116,6 @@ namespace WinFormsApp1
                                 g.FillRectangle(Brushes.Black, barX, barY, barWidth, barHeight);
                             }
                         }
-
-                        CalculateEqualizedHistogram(img1);
 
                         panel1.BackgroundImage = histogramImage;
                         pictureBox1.Image = img1;
@@ -653,6 +652,7 @@ namespace WinFormsApp1
                         }
                     }
 
+                    CalculateEqualizedHistogram(img1);
                     pictureBox3.Image = equalizedImage;
                 }
             }
@@ -773,5 +773,265 @@ namespace WinFormsApp1
             return equalizedHistogram;
         }
 
+        private void button15_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null)
+                {
+                    int width = img1.Width;
+                    int height = img1.Height;
+                    int windowSize = 3;
+
+                    Bitmap medianImage = new Bitmap(width, height);
+
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            List<int> pixelValues = new List<int>();
+                            for (int ni = i - windowSize / 2; ni <= i + windowSize / 2; ni++)
+                            {
+                                for (int nj = j - windowSize / 2; nj <= j + windowSize / 2; nj++)
+                                {
+                                    if (ni >= 0 && ni < width && nj >= 0 && nj < height)
+                                    {
+                                        Color pixel = img1.GetPixel(ni, nj);
+                                        int intensity = (pixel.R + pixel.G + pixel.B) / 3;
+                                        pixelValues.Add(intensity);
+                                    }
+                                }
+                            }
+
+                            pixelValues.Sort();
+
+                            int medianIndex = pixelValues.Count / 2;
+
+                            int medianValue = pixelValues[medianIndex];
+
+                            medianImage.SetPixel(i, j, Color.FromArgb(medianValue, medianValue, medianValue));
+                        }
+                    }
+
+                    pictureBox3.Image = medianImage;
+                }
+
+
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Erro ao adicionar um valor à imagem", "Verifique o tamanho da imagem...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir a imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null)
+                {
+                    int width = img1.Width;
+                    int height = img1.Height;
+                    int windowSize = 3;
+                    int order;
+
+                    if (!int.TryParse(textBox6.Text, out order))
+                    {
+                        order = 1;
+                    }
+
+                    Bitmap orderedImage = new Bitmap(width, height);
+
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            List<int> pixelValues = new List<int>();
+
+                            for (int ni = i - windowSize / 2; ni <= i + windowSize / 2; ni++)
+                            {
+                                for (int nj = j - windowSize / 2; nj <= j + windowSize / 2; nj++)
+                                {
+                                    if (ni >= 0 && ni < width && nj >= 0 && nj < height)
+                                    {
+                                        Color pixel = img1.GetPixel(ni, nj);
+                                        int intensity = (pixel.R + pixel.G + pixel.B) / 3;
+                                        pixelValues.Add(intensity);
+                                    }
+                                }
+                            }
+
+                            pixelValues.Sort();
+                            int selectedValue = pixelValues[order - 1];
+                            orderedImage.SetPixel(i, j, Color.FromArgb(selectedValue, selectedValue, selectedValue));
+                        }
+                    }
+
+                    pictureBox3.Image = orderedImage;
+                }
+
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Erro ao adicionar um valor à imagem", "Verifique o tamanho da imagem...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir a imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null)
+                {
+                    int width = img1.Width;
+                    int height = img1.Height;
+                    int windowSize = 3;
+                    int threshold = 20;
+
+                    Bitmap smoothedImg = new Bitmap(width, height);
+
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            List<int> pixelValues = new List<int>();
+
+                            for (int ni = i - windowSize / 2; ni <= i + windowSize / 2; ni++)
+                            {
+                                for (int nj = j - windowSize / 2; nj <= j + windowSize / 2; nj++)
+                                {
+                                    if (ni >= 0 && ni < width && nj >= 0 && nj < height)
+                                    {
+                                        Color pixel = img1.GetPixel(ni, nj);
+                                        int intensity = (pixel.R + pixel.G + pixel.B) / 3;
+                                        pixelValues.Add(intensity);
+                                    }
+                                }
+                            }
+
+                            pixelValues.Sort();
+
+                            int centralValue = pixelValues[pixelValues.Count / 2];
+                            int sum = 0;
+                            int count = 0;
+
+                            foreach (int value in pixelValues)
+                            {
+                                if (Math.Abs(value - centralValue) <= threshold)
+                                {
+                                    sum += value;
+                                    count++;
+                                }
+                            }
+
+                            int smoothedValue = count > 0 ? sum / count : centralValue;
+                            smoothedImg.SetPixel(i, j, Color.FromArgb(smoothedValue, smoothedValue, smoothedValue));
+                        }
+                    }
+
+                    pictureBox3.Image = smoothedImg;
+                }
+
+
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Erro ao adicionar um valor à imagem", "Verifique o tamanho da imagem...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir a imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (img1 != null)
+                {
+                    int width = img1.Width;
+                    int height = img1.Height;
+
+                    Bitmap filteredImg = new Bitmap(width, height);
+                    double sigma;
+
+                    if (!double.TryParse(textBox6.Text, out sigma))
+                    {
+                        sigma = 0.2f;
+                    }
+
+                    int kernelSize = 5;
+                    int kernelHalfSize = kernelSize / 2;
+
+                    double[,] kernel = new double[kernelSize, kernelSize];
+                    double kernelSum = 0;
+
+                    for (int i = -kernelHalfSize; i <= kernelHalfSize; i++)
+                    {
+                        for (int j = -kernelHalfSize; j <= kernelHalfSize; j++)
+                        {
+                            double exponent = -(i * i + j * j) / (2 * sigma * sigma);
+                            kernel[i + kernelHalfSize, j + kernelHalfSize] = Math.Exp(exponent);
+                            kernelSum += kernel[i + kernelHalfSize, j + kernelHalfSize];
+                        }
+                    }
+
+                    for (int i = 0; i < kernelSize; i++)
+                    {
+                        for (int j = 0; j < kernelSize; j++)
+                        {
+                            kernel[i, j] /= kernelSum;
+                        }
+                    }
+
+                    for (int i = kernelHalfSize; i < width - kernelHalfSize; i++)
+                    {
+                        for (int j = kernelHalfSize; j < height - kernelHalfSize; j++)
+                        {
+                            double r = 0, g = 0, b = 0;
+
+                            for (int k = -kernelHalfSize; k <= kernelHalfSize; k++)
+                            {
+                                for (int l = -kernelHalfSize; l <= kernelHalfSize; l++)
+                                {
+                                    Color pixel = img1.GetPixel(i + k, j + l);
+                                    double kernelValue = kernel[k + kernelHalfSize, l + kernelHalfSize];
+
+                                    r += pixel.R * kernelValue;
+                                    g += pixel.G * kernelValue;
+                                    b += pixel.B * kernelValue;
+                                }
+                            }
+
+                            int filteredR = (int)Math.Round(r);
+                            int filteredG = (int)Math.Round(g);
+                            int filteredB = (int)Math.Round(b);
+
+                            filteredImg.SetPixel(i, j, Color.FromArgb(filteredR, filteredG, filteredB));
+                        }
+                    }
+
+                    pictureBox2.Image = filteredImg;
+                }
+
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Erro ao adicionar um valor à imagem", "Verifique o tamanho da imagem...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao abrir a imagem...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
